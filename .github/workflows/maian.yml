@@ -1,0 +1,28 @@
+name: Build Windows Executable
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install PyInstaller
+        run: |
+          pip install pyinstaller
+          
+      - name: Build Windows .exe
+        run: |
+          pyinstaller --onedir --noconsole FullpiebetaV1.0.py
+          
+      - name: Upload Windows Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Windows-Game-Build
+          path: dist/
