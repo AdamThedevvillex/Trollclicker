@@ -1,0 +1,41 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main, master ]
+  release:
+    types: [ created ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies & PyInstaller
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Build Windows Executable
+        run: |
+          pyinstaller --onefile --noconsole Pie_Beta.py
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-EXE-Build
+          path: dist/Pie_Beta.exe
+
+git add .
+git commit -m "Add Windows GitHub Actions build script"
+git push origin main
+git add .
+git commit -m "Add Windows GitHub Actions build script"
+git push origin main
